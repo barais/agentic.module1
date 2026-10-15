@@ -66,7 +66,7 @@ layout: default
 </v-clicks>
 
 ---
-layout: two-cols
+layout: two-cols-header
 ---
 
 # 2. Qu'est-ce qu'il sait faire ?
@@ -159,7 +159,7 @@ Chaque token recalcule sa signification en « regardant » tous les autres token
 - Dans *"La banque de France"* et *"La banque de la rivière"*, le mot **banque** reçoit une projection vectorielle différente grâce aux mots voisins.
 
 ---
-layout: two-cols
+layout: two-cols-header
 ---
 
 # 5. Du texte brut au dialogue : Le cycle d'entraînement
@@ -397,7 +397,7 @@ Trois manières très différentes d'apporter de la spécificité à un LLM :
 <!-- COLONNE 2 : LONG CONTEXT -->
 <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-800 flex flex-col justify-between">
   <div>
-    <div class="font-bold text-sm text-purple-500 mb-1">2. Contexte 1M+ (Gemini, Claude)</div>
+    <div class="font-bold text-sm text-purple-500 mb-1">2. Contexte 1M+ (Gemini 3.1 flash, Sonet, Deepseek)</div>
     <div class="text-gray-400 mb-2 italic">« Prends tout le dossier d'un coup »</div>
     <div class="text-emerald-500 font-semibold mb-1">Avantages :</div>
     <ul class="space-y-1 mb-2">
