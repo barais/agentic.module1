@@ -4,7 +4,7 @@
       <SlideCurrentNo /> / <SlidesTotal />
     </span>
     <img
-      src="./UR.svg"
+      src="/UR.svg"
       alt="Université de Rennes"
       class="h-5 opacity-50"
       title="Université de Rennes"
