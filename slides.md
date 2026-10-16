@@ -21,7 +21,7 @@ transition: slide-left
 comark: true
 download: true
 # duration of the presentation
-duration: 35min
+duration: 10min
 ---
 
 # Module 1 : Grands Modèles de Langage (LLM)
@@ -190,25 +190,37 @@ layout: default
 
 En augmentant la taille des modèles et des données, de nouveaux comportements apparaissent sans entraînement explicite :
 
-<div class="grid grid-cols-3 gap-6 mt-6">
-<div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+<div class="grid grid-cols-3 gap-1 mt-1">
+<div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
 
-### In-Context Learning
-Le modèle adapte sa dynamique en lisant simplement des exemples dans le prompt, sans modifier ses poids internes.
-
+#### In-Context Learning
+<p class="text-sm">Le modèle adapte sa dynamique en lisant simplement des exemples dans le prompt, sans modifier ses poids internes.</p>
 </div>
-<div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+<div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
 
-### Instruction Following
-Capacité à décomposer des consignes complexes comportant des contraintes négatives (*« sans utiliser la lettre E »*).
-
+#### Instruction Following
+<p class="text-sm">Capacité à décomposer des consignes complexes comportant des contraintes négatives (*« sans utiliser la lettre E »*).</p>
 </div>
-<div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+<div class="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
 
-### Décomposition
-Capacité à amorcer un pseudo-raisonnement symbolique si on le force à expliciter les étapes intermédiaires.
-
+#### Décomposition
+<p class="text-sm">Capacité à amorcer un pseudo-raisonnement symbolique si on le force à expliciter les étapes intermédiaires.</p>
 </div>
+</div>
+<!-- Encart ajouté : débat sur l'émergence -->
+<div class="mt-3 p-2 rounded-lg border border-indigo-500/50 bg-indigo-50/80 dark:bg-indigo-950/40">
+  <div class="font-bold text-indigo-600">⚠️ « Émergence » : un terme débattu</div>
+  <p class="text-sm mt-1">
+    Ces comportements semblent « apparaître » au-delà d'un seuil de taille, mais l'article fondateur
+    <i>« Are Emergent Abilities of Large Language Models a Mirage? »</i> (Schaeffer et al., 2023)
+    montre qu'une partie de cette soudaineté pourrait être un <b>artefact de mesure</b> :
+    selon la métrique ou l'échantillonnage choisis, une progression continue peut <i>paraître</i> émerger d'un coup.
+  </p>
+  <p class="text-sm mt-1">
+    <b>Concrètement pour vous :</b> ces capacités sont <b>réelles et utilisables</b>, mais elles sont souvent
+    <b>continues et prévisibles</b> plutôt que magiques. Réflexe : testez le modèle sur <b>votre</b> tâche réelle,
+    ne vous fiez jamais aux seuls scores publiés.
+  </p>
 </div>
 
 ---
@@ -216,6 +228,8 @@ layout: default
 ---
 
 # 7. Les limites fondamentales
+
+
 
 Ne jamais oublier ce qu'est la boîte noire :
 
@@ -240,6 +254,39 @@ Ne jamais oublier ce qu'est la boîte noire :
   - Inférence coûteuse en énergie et mémoire GPU.
 
 </div>
+
+</div>
+
+---
+layout: default
+---
+
+# 7. Les limites fondamentales
+
+
+
+Ne jamais oublier comment la boîte noire est entrainée :
+<!-- Encart ajouté : Biais & Représentations -->
+<div class="mt-4 p-4 rounded-lg border border-amber-500/60 bg-amber-50/80 dark:bg-amber-950/40">
+  <div class="font-bold text-amber-600">⚖️ Biais & Représentations</div>
+  <div class="grid grid-cols-3 gap-4 text-sm mt-2">
+    <div>
+      <div class="font-semibold text-amber-600">Le problème</div>
+      Le modèle <b>reproduit et amplifie</b> les biais de ses données d'entraînement : stéréotypes
+      de genre, d'ethnicité, de langue ou de classe sociale.
+    </div>
+    <div>
+      <div class="font-semibold text-amber-600">Le risque côté développeur</div>
+      Tri de CV, modération, scoring automatique… un biais non détecté devient une
+      <b>décision outillée discriminatoire</b> et difficile à tracer.
+    </div>
+    <div>
+      <div class="font-semibold text-amber-600">Les garde-fous</div>
+      • Évaluer avant déploiement (ex. benchmarks <i>BBQ</i>, <i>Winogender</i>)<br>
+      • Mesurer les disparités par sous-population<br>
+      • Soigner le prompt et les sources du RAG (un RAG biaisé propage ses biais)
+    </div>
+  </div>
 </div>
 
 ---
@@ -269,38 +316,54 @@ Retourne uniquement le bloc de code Python.
 💡 **Chain-of-Thought (CoT) :** Ajouter *« Réfléchissons étape par étape »* force le modèle à générer des tokens intermédiaires avant d'arrêter sa conclusion.
 
 ---
-layout: default
+layout: two-cols-header
+
 ---
 
 # 9. La nouvelle frontière : "Reasoning Models"
 
 <div class="text-sm text-gray-500 mb-4">Paradigme Test-Time Compute (ex. OpenAI o1/o3, DeepSeek-R1)</div>
 
-<div class="grid grid-cols-2 gap-8 items-center">
+::left::
 <div>
 
-### Modèles classiques (Style GPT-4o)
-- Répond immédiatement dès le premier token généré
-- Coût de calcul fixé uniquement par la longueur de la réponse finale
+### Modèles classiques (style GPT-4o)
+- Planifient « en interne » dans leurs poids, mais n'allouent **aucun budget de calcul dédié** avant d'entamer leur réponse
+- Coût de calcul fixé uniquement par la longueur de la réponse générée
 
-### Modèles à raisonnement
-- Allouent du temps de calcul **avant** d'afficher la réponse
-- Génèrent une chaîne de pensée interne cachée (*Hidden CoT*)
-- Auto-correction, exploration d'arbres de recherche et retour en arrière
-
+### Modèles à raisonnement (OpenAI o1/o3, DeepSeek-R1)
+- Allouent du **temps de calcul supplémentaire à l'inférence** (*test-time compute*) pour « réfléchir » avant la réponse finale
+- **Distinction clé entre les deux familles :**
+  - **DeepSeek-R1** : la chaîne de pensée est générée sous forme de **tokens visibles** dans le contexte (entraînée par RL) — mécanisme **documenté, observable, reproductible**.
+  - **OpenAI o1/o3** : le mécanisme interne **n'a jamais été publié** ; on constate seulement que le budget de calcul augmente. Parler de « *hidden CoT* » est donc une **hypothèse externe, pas un fait technique**.
+  
 </div>
+
+::right::
 
 <div class="p-4 bg-emerald-50 dark:bg-emerald-950 border border-emerald-600 rounded-xl">
   <div class="font-bold text-emerald-600 text-lg">Le shift conceptuel</div>
   <p class="text-sm mt-2">
     On ne paie plus seulement pour la taille du modèle (taille des poids), mais pour le <b>temps de réflexion</b> alloué à l'inférence.
   </p>
-  <div class="mt-3 text-xs font-mono text-gray-400">
-    Plus de test-time compute = taux d'erreur en chute libre sur les maths & le code.
+<div class="mt-3 text-xs font-mono text-gray-400">
+    Plus de test-time compute = erreurs en forte baisse sur les maths & le code,
+    mais gains marginaux ailleurs (rédaction, traduction).
   </div>
 </div>
-</div>
 
+<style>
+.slidev-layout.two-columns {
+  grid-template-columns: 65% 35%;
+}
+/* style.css */
+.slidev-layout.two-cols-header {
+  grid-template-columns: 3fr 2fr;
+}
+li {
+  font-size: 0.8em;
+}
+</style>
 ---
 layout: default
 ---
@@ -309,8 +372,8 @@ layout: default
 
 <div class="font-semibold text-emerald-600 mb-2">Retrieval-Augmented Generation (Génération Augmentée par Récupération)</div>
 
-Le LLM apporte le **moteur linguistique**, une base documentaire apporte la **vérité terrain**.
-
+Le LLM apporte le **moteur linguistique**, la base documentaire apporte **des sources contrôlées**,
+pas une garantie de vérité.
 ```
 [Question utilisateur]
          │
@@ -333,12 +396,45 @@ Le LLM apporte le **moteur linguistique**, une base documentaire apporte la **v�
 layout: default
 ---
 
+# 10. RAG : Brancher le modèle sur le réel
+
+
+<!-- Encart ajouté : RAG ≠ garantie d'exactitude -->
+<div class="mt-4 p-4 rounded-lg border border-rose-500/60 bg-rose-50/80 dark:bg-rose-950/40">
+  <div class="font-bold text-rose-600">⚠️ RAG ≠ garantie d'exactitude</div>
+  <div class="grid grid-cols-3 gap-4 text-sm mt-2">
+    <div>
+      <div class="font-semibold text-rose-600">Pourquoi ça peut encore échouer</div>
+      - Récupération ratée (mauvais chunk, info éparpillée sur 50 pages)<br>
+      - Le modèle <b>suit un prompt, pas une obligation</b> : il peut ignorer l'extrait ou halluciner en plus<br>
+      - Information absente de la base → aucune chance de réponse correcte<br>
+      - Source erronée ou biaisée → erreur propagée (<i>garbage in, garbage out</i>)
+    </div>
+    <div>
+      <div class="font-semibold text-rose-600">Ce que RAG améliore réellement</div>
+      - La <b>fraîcheur</b> des connaissances (documents à jour à la seconde)<br>
+      - La <b>traçabilité</b> (citations et sources vérifiables)<br>
+      - Le <b>périmètre</b> : la réponse est bornée à un corpus maîtrisé
+    </div>
+    <div>
+      <div class="font-semibold text-rose-600">Réflexes à conserver</div>
+      - Instruire le modèle : « si l'extrait ne contient pas la réponse, dis-le »<br>
+      - Évaluer la qualité de la recherche à part (<i>retrieval eval</i>), pas seulement la réponse finale<br>
+      - Vérifier les citations avant diffusion : <b>RAG = traçable, pas certifié</b>
+    </div>
+  </div>
+</div>
+
+---
+layout: default
+---
+
 # 11. Comment adapter ? L'arbre de décision
 
 Avant de vouloir ré-entraîner un modèle, il existe une hiérarchie stricte d'effort et de coût :
 
-<div class="grid grid-cols-3 gap-4 mt-6">
-<div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+<div class="grid grid-cols-3 gap-2 mt-3">
+<div class="p-2 border rounded-lg bg-gray-50 dark:bg-gray-800">
 
 ### 1. Prompting & Few-Shot
 **Quand ?** Tâches générales, génération standard, extraction ponctuelle.  
@@ -346,7 +442,7 @@ Avant de vouloir ré-entraîner un modèle, il existe une hiérarchie stricte d'
 **Limites :** Dépendant de la taille du contexte.
 
 </div>
-<div class="p-4 border-2 border-emerald-500 rounded-lg bg-emerald-50 dark:bg-emerald-950">
+<div class="p-2 border-2 border-emerald-500 rounded-lg bg-emerald-50 dark:bg-emerald-950">
 
 ### 2. RAG
 **Quand ?** Données d'entreprise récentes, documents privés, besoin de traçabilité des sources.  
@@ -354,7 +450,7 @@ Avant de vouloir ré-entraîner un modèle, il existe une hiérarchie stricte d'
 **Limites :** Qualité du chunking et de la recherche.
 
 </div>
-<div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+<div class="p-2 border rounded-lg bg-gray-50 dark:bg-gray-800">
 
 ### 3. Fine-Tuning
 **Quand ?** Apprendre un **style**, une syntaxe de code propriétaire ou un jargon hermétique.  
@@ -363,11 +459,35 @@ Avant de vouloir ré-entraîner un modèle, il existe une hiérarchie stricte d'
 </div>
 </div>
 
+<!-- Encart ajouté : évaluation -->
+<div class="mt-3 p-2 rounded-lg border border-sky-500/50 bg-sky-50/80 dark:bg-sky-950/40">
+  <div class="font-bold text-sky-600">📊 Avant de choisir, mesurer : l'évaluation n'est pas optionnelle</div>
+  <p class="text-sm mt-2">
+    - Constituer un <b>jeu de test représentatif de son cas réel</b> (une vingtaine d'entrées typiques) et comparer
+    modèles, prompts et variantes RAG sur ce jeu — c'est la compétence la plus rentable de ce module.<br>
+    - Repères publics : <i>MMLU</i> (culture générale), <i>HumanEval / LiveCodeBench</i> (code),
+    <i>GSM8K</i> (raisonnement mathématique), <i>BBQ</i> (biais).<br>
+    - Règle d'or : un benchmark public sert à <b>repérer</b> des modèles, jamais à <b>choisir</b> pour son cas.    seul votre <i>golden set</i> fait foi.
+  </p>
+</div>
+
+<style>
+h3 {
+  font-size: 1.2em;
+}
+
+p {
+  font-size: 0.8em;
+}
+</style>
+
 ---
 layout: default
 ---
 
 # RAG vs Fine-Tuning vs Contexte Massif (1M+)
+
+
 
 Trois manières très différentes d'apporter de la spécificité à un LLM :
 
@@ -380,14 +500,14 @@ Trois manières très différentes d'apporter de la spécificité à un LLM :
     <div class="text-gray-400 mb-2 italic">« Va chercher la page précise »</div>
     <div class="text-emerald-500 font-semibold mb-1">Avantages :</div>
     <ul class="space-y-1 mb-2">
-      <li>• Données fraîches & modifiables à la seconde</li>
-      <li>• <b>Traçabilité :</b> citations et sources vérifiables</li>
-      <li>• Gestion fine des droits d'accès (ACL/RBAC)</li>
+      <li>Données fraîches & modifiables à la seconde</li>
+      <li><b>Traçabilité :</b> citations et sources vérifiables</li>
+      <li>Gestion fine des droits d'accès (ACL/RBAC)</li>
     </ul>
     <div class="text-red-500 font-semibold mb-1">Inconvénients :</div>
     <ul class="space-y-1">
-      <li>• Pipeline lourd (chunking, vecteurs, reranking)</li>
-      <li>• Échec si l'information est éparpillée sur 50 pages</li>
+      <li>Pipeline lourd (chunking, vecteurs, reranking)</li>
+      <li>Échec si l'information est éparpillée sur 50 pages</li>
     </ul>
   </div>
   <div class="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700 font-medium text-gray-500">
@@ -398,19 +518,18 @@ Trois manières très différentes d'apporter de la spécificité à un LLM :
 <!-- COLONNE 2 : LONG CONTEXT -->
 <div class="p-3 border rounded-lg bg-gray-50 dark:bg-gray-800 flex flex-col justify-between">
   <div>
-    <div class="font-bold text-sm text-purple-500 mb-1">2. Contexte 1M+ (Gemini 3.1 flash, Sonet, Deepseek)</div>
-    <div class="text-gray-400 mb-2 italic">« Prends tout le dossier d'un coup »</div>
+<div class="font-bold text-sm text-purple-500 mb-1">2. Contexte long (fenêtres 1M+ tokens) 2026 — Gemini, GPT, Claude Sonnet, DeepSeek, Llama…</div>    <div class="text-gray-400 mb-2 italic">« Prends tout le dossier d'un coup »</div>
     <div class="text-emerald-500 font-semibold mb-1">Avantages :</div>
     <ul class="space-y-1 mb-2">
-      <li>• Zéro infra complexe : un seul prompt géant</li>
-      <li>• <b>Vue globale :</b> croise les chapitres/fichiers sans perte de contexte</li>
-      <li>• Analyse tout un repo de code ou un livre</li>
+      <li>Zéro infra complexe : un seul prompt géant</li>
+      <li><b>Vue globale :</b> croise les chapitres/fichiers sans perte de contexte</li>
+      <li>Analyse tout un repo de code ou un livre</li>
     </ul>
     <div class="text-red-500 font-semibold mb-1">Inconvénients :</div>
     <ul class="space-y-1">
-      <li>• Coût et latence (TTFT) élevés par requête</li>
-      <li>• Risque d'inattention au milieu (<i>Lost in the middle</i>)</li>
-      <li>• Ne remplace pas une base d'entreprise (capacité finie)</li>
+      <li>Coût et latence (TTFT) élevés par requête</li>
+      <li>Risque d'inattention au milieu (<i>Lost in the middle</i>)</li>
+      <li>Ne remplace pas une base d'entreprise (capacité finie)</li>
     </ul>
   </div>
   <div class="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700 font-medium text-gray-500">
@@ -425,15 +544,14 @@ Trois manières très différentes d'apporter de la spécificité à un LLM :
     <div class="text-gray-400 mb-2 italic">« Modifie tes réflexes et ton style »</div>
     <div class="text-emerald-500 font-semibold mb-1">Avantages :</div>
     <ul class="space-y-1 mb-2">
-      <li>• Maîtrise absolue du format (JSON strict, DSL)</li>
-      <li>• Réduit les prompts (plus besoin de 10 exemples)</li>
-      <li>• Modèle plus petit = inférence rapide & autonome</li>
+      <li>Maîtrise absolue du format (JSON strict, DSL)</li>
+      <li>Réduit les prompts (plus besoin de 10 exemples)</li>
+      <li>Modèle plus petit = inférence rapide & autonome</li>
     </ul>
     <div class="text-red-500 font-semibold mb-1">Inconvénients :</div>
     <ul class="space-y-1">
-      <li>• <b>Mauvais pour mémoriser des faits</b> (hallucine)</li>
-      <li>• Connaissances figées dans le temps</li>
-      <li>• Risque d'oubli catastrophique (baisse en général)</li>
+      <li><b>Mauvais pour mémoriser des faits</b> (hallucine)</li>
+      <li>Connaissances figées dans le temps</li>
     </ul>
   </div>
   <div class="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700 font-medium text-gray-500">
@@ -448,26 +566,86 @@ Trois manières très différentes d'apporter de la spécificité à un LLM :
   💡 <b>La règle du terrain :</b> RAG pour les <i>connaissances</i> · Contexte 1M pour le <i>raisonnement global ponctuel</i> · Fine-Tuning pour la <i>forme et le comportement</i>.
 </div>
 
+<style>
+h3 {
+  font-size: 1.2em;
+}
+li {
+  font-size: 0.8em;
+}
+</style>
+
+
+
 ---
 layout: default
 ---
 
-# 12. Synthèse & Transition vers l'Agentique
+# 🧠 Ce qu'il faut retenir de ce premier module
 
-<div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg mb-6">
-  <div class="font-bold text-lg mb-2">Ce qu'il faut retenir du socle LLM :</div>
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="p-3 rounded-lg border border-emerald-500/60 bg-emerald-50/80 dark:bg-emerald-950/40">
+  <div class="font-bold text-emerald-600 mb-1">🤖 La nature du LLM</div>
   <ul class="text-sm space-y-1">
-    <li>✓ Un LLM produit une suite de tokens vraisemblables à partir d'un contexte d'entrée.</li>
-    <li>✓ Il excelle pour structurer, synthétiser et reformuler, mais il hallucine sur les faits purs.</li>
-    <li>✓ Le RAG compense son absence de mémoire fraîche en lui fournissant des documents à la volée.</li>
+    <li>Un <b>prédicteur statistique</b>, pas un oracle ni une base de faits</li>
+    <li>Il génère le <b>token suivant</b>, de façon auto-régressive, mot après mot</li>
+    <li>Règle d'or : <b><i>vraisemblable ≠ vrai</i></b> → toujours vérifier</li>
   </ul>
 </div>
 
-### Vers le Module 2 : L'Agentique
-Isolé, le LLM ne peut que parler. Pour qu'il devienne un **Agent**, il lui faut :
-1. **Des outils** (exécuter du Python, interroger une API, naviguer sur le web)
-2. **Une boucle de décision** (observer $\rightarrow$ raisonner $\rightarrow$ agir $\rightarrow$ corriger)
-3. **Une mémoire persistante** au-delà d'un simple prompt.
+<div class="p-3 rounded-lg border border-emerald-500/60 bg-emerald-50/80 dark:bg-emerald-950/40">
+  <div class="font-bold text-emerald-600 mb-1">💪 Ce qu'il sait faire</div>
+  <ul class="text-sm space-y-1">
+    <li>Structurer, synthétiser, reformuler, traduire, coder</li>
+    <li><b>In-context learning :</b> apprend d'exemples placés dans le prompt, sans modifier ses poids</li>
+    <li><b>CoT :</b> raisonner par décomposition si on le force à expliciter ses étapes</li>
+  </ul>
+</div>
+
+<div class="p-3 rounded-lg border border-rose-500/60 bg-rose-50/80 dark:bg-rose-950/40">
+  <div class="font-bold text-rose-600 mb-1">⚠️ Ses limites</div>
+  <ul class="text-sm space-y-1">
+    <li><b>Hallucinations :</b> affirmatif mais faux — inhérent au principe statistique</li>
+    <li>Fenêtre de contexte finie (<i>lost in the middle</i>)</li>
+    <li>Non-déterminisme (température) & <b>biais</b> hérités des données</li>
+  </ul>
+</div>
+
+<div class="p-3 rounded-lg border border-sky-500/60 bg-sky-50/80 dark:bg-sky-950/40">
+  <div class="font-bold text-sky-600 mb-1">🔧 Nos leviers</div>
+  <ul class="text-sm space-y-1">
+    <li><b>Prompting :</b> rôle + contexte + contraintes + format (le moins cher)</li>
+    <li><b>RAG :</b> injecter des sources fraîches, traçables — mais pas certifiées</li>
+    <li><b>Reasoning models :</b> payer du temps de réflexion (test-time compute)</li>
+    <li>Fine-tuning : pour ajuster la forme & style, pas pour apprendre des faits</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="mt-1 p-1 rounded-lg bg-gray-100 dark:bg-gray-800 border-l-1 border-amber-500">
+  <p class="text-sm">
+    Avant de choisir un modèle, un prompt ou une architecture : <b>construire un jeu de test représentatif de votre cas réel</b>
+     les benchmarks publics servent à repérer, seul votre <i>golden set</i> fait foi.
+  </p>
+</div>
+
+<div class="mt-2 text-center text-xs text-gray-400">
+  Socle acquis : la boîte noire, ses forces, ses limites, et nos leviers pour la guider...
+</div>
+
+<style>
+h3 {
+  font-size: 1.2em;
+}
+li {
+  font-size: 0.8em;
+}
+p {
+  font-size: 0.8em;
+}
+</style>
 
 ---
 layout: end
@@ -477,6 +655,12 @@ class: text-center
 # Fin du Module 1
 ### Place aux échanges & questions !
 
-[DiverSE Univ. Rennes](http://www.diverse-team.fr)
+  <p class="text-sm mt-1">
+   <b>un LLM isolé sait « parler »</b>. Il ne devient un
+    <b>Agent</b> qu'avec des <b>outils</b>, une <b>boucle de décision</b> et une <b>mémoire persistante</b> → Module 2 !
+  </p>
+
+
+[DiverSE Univ. Rennes](http://www.diverse-team.fr) © 2026 
 
 
