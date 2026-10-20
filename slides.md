@@ -657,7 +657,7 @@ class: text-center
 
   <p class="text-sm mt-1">
    <b>un LLM isolé sait « parler »</b>. Il ne devient un
-    <b>Agent</b> qu'avec des <b>outils</b>, une <b>boucle de décision</b> et une <b>mémoire persistante</b> → [Module 2](https://olivier.barais.fr/agentic.module2/) !
+    <b>Agent</b> qu'avec des <b>outils</b>, une <b>boucle de décision</b> et une <b>mémoire persistante</b> → <a href="https://olivier.barais.fr/agentic.module2/">Module 2</a> !
   </p>
 
 
